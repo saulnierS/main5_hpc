@@ -28,5 +28,5 @@ $(question5): $(OBJECT) question5_mergeSmallBatch_shared.cu question5_treeMergeP
 	nvcc -o  question5_smallBatchesOnly question5_smallBatchesOnly.cu
 
 clean:
-	rm -f $(OBJECT) $(EXEC)
+	rm -f $(OBJECT) $(question1) $(question2) $(question3) $(question4) $(question5)
 
