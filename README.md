@@ -2,36 +2,55 @@
 Projet : Batch merge and merge path sort
 
 #Fichiers
-fonctionsCPU.c : (écrit en c) fonctions sur CPU pour le trie et la verification du trie des tableaux. Il y a des fonctions tests egalement.
+code/: (contient l'ensemble des codes)
+time_register/: (permet d'enregistrer les temps d'execution des codes)
+ => ces repertoires contiennent les mêmes fichiers qui sont les suivants:
 
-question1_mergeSmall_k.cu : (écrit en cuda) merge 2 tableaux sur 1 seul bloc. La taille de A plus la taille de B ne doit pas dépasser le nombre de threads d'un bloc.
+code_seq.cu: (écrit en cuda) merge 2 tableaux en séquentiel sur cpu.
 
-question1_mergeSmall_k_shared.cu : (écrit en cuda) merge 2 tableaux sur 1 seul bloc. La taille de A plus la taille de B ne doit pas dépasser le nombre de threads d'un bloc. Cette fois on utilise la shared mémory du bloc
+mergeSmall_k.cu : (écrit en cuda) merge 2 tableaux sur gpu sur 1 seul block. La taille de A plus la taille de B ne doit pas dépasser 1024.
 
-question2_mergeBig_k.cu : (écrit en cuda) merge 2 tableaux sur plusieurs bloc cette fois. Attention à ne pas dépasser la mémoire globale.
+mergeSmall_k_shared.cu : (écrit en cuda) merge 2 tableaux sur gpu sur 1 seul block. La taille de A plus la taille de B ne doit pas dépasser 1024. Cette fois on utilise la shared mémory du bloc.
 
-question3_sort.cu : (écrit en cuda) réalise le trie d'un tableau sur gpu avec plusieurs bloc et plusieurs threads.
+mergeBig_k.cu : (écrit en cuda) merge 2 tableaux sur gpu sur plusieurs blocks cette fois. Attention à ne pas dépasser la mémoire globale.
 
-question4_mergeBig_k.cu : (écrit en cuda) merge dans un premier temps les sous tableaux de A et B puis merge 2 à 2 les tableaux pour en obtenir un seul.
+sort.cu : (écrit en cuda) réalise le trie d'un tableau sur gpu avec plusieurs bloc et plusieurs threads.
 
-question4_mergeBig_k_stream.cu : (écrit en cuda) merge dans un premier temps les sous tableaux de A et B puis merge 2 à 2 les tableaux pour en obtenir un seul. Cette fois on utilise des streams pour paralléliser aussi les kernels
+sort_stream.cu : (écrit en cuda) réalise le trie d'un tableau sur gpu avec plusieurs bloc et plusieurs threads et avec les streams.
 
-question5_mergeSmallBatch_shared.cu (écrit en cuda) merge dans un premier temps les sous tableaux de A et B puis merge 2 à 2 les tableaux pour en obtenir un seul. Cette version utilise la shared memory et la taille de chacun des sous tableaux de A et B doit être inférieur aux nombres de threads par bloc. 
+mergeSmallBatches_Only.cu : (écrit en cuda) divise un tableau en sous tableaux et merge des Batches de 1024 éléments maximums
 
-question5_treeMergePerBlock_simpleExemple.cu : (écrit en cuda) merge dans un premier temps les sous tableaux de A et B puis merge 2 à 2 les tableaux pour en obtenir un seul. Cette version utilise la shared memory et la taille de chacun des sous tableaux de A et B doit être inférieur aux nombres de threads par bloc.  [?]
+mergeBatches.cu : (écrit en cuda) divise un tableau en sous tableaux et merge les sous tableaux entre eux sous forme de Batches de 1024 en parallèle (avec les streams) dans un premier temps quand les tailles dépassent 1024 merge avec mergeBig_k. La shared et les streams sont mis à contribution
 
-question5_smallBatchesOnly.cu : (écrit en cuda) merge dans un premier temps les sous tableaux de A et B puis merge 2 à 2 les tableaux pour en obtenir un seul. Cette version utilise la shared memory et la taille de chacun des sous tableaux de A et B doit être inférieur aux nombres de threads par bloc.  [?]
 
-cmd.sh: permet d'executer l'ensemble des fichiers, contient toutes les commandes. attention rectifier les droits pour pouvoir l'executer. (./cmd.sh)
+cmd.sh: permet d'executer l'ensemble des fichiers, contient toutes les commandes. attention rectifier les droits pour pouvoir l'executer. Faire chmod 777 cmd.sh puis ./cmd.sh
 
-Makefile: la commande make permet d'executer tous les fichiers afin d'avoir tous les executables. 
+Makefile: la commande make permet d'executer tous les fichiers afin d'avoir tous les executables. Il y a un make clean disponible pour supprimer les exécutables et chaque question peut être compiler avec make question1 (cela peut être 1,2,3,5).attention il n'y a pas de code pour la question4
 
 README.md : fichier guide
 
 #Execution
-Ce projet est codé en c et en cuda. Il est implémenté pour s'executer sur GPU. Avant d'executer n'importe quel fichier cuda il faut faire (gcc -o fonctionsCPU.o -c fonctionsCPU.c). Autrement il suffit de compiler avec nvcc les fichiers cuda (nvcc -o nom_fichier nom_fichier.cu). puis d'executer (./nom_fichier)
+Ce projet est codé en c et en cuda. Il est implémenté pour s'executer sur GPU. Autrement il suffit de compiler avec nvcc les fichiers cuda (nvcc -o nom_fichier nom_fichier.cu). puis d'executer (./nom_fichier)
 
-# Commande git
+Un makefile est diponible:
+Compilation de tous les fichiers
+``make ``
+Compilation de la question1
+``make question1 ``
+Compilation de la question2
+``make question2 ``
+Compilation de la question3
+``make question3 ``
+Compilation de la question5
+``make question5 ``
+Compilation du code en séquentiel
+``make sed ``
+
+Un cmd.sh est diponible:
+``chmod 777 cmd.sh ``
+``./cmd.sh ``
+
+# Rappel Commande git
 Dès que vous créez un nouveau fichier ajouter le au dépôt 
 ``git add fichier ``
 

@@ -1,29 +1,24 @@
 #! /bin/sh
-gcc -o fonctionsCPU.o -c fonctionsCPU.c
+nvcc -o merge_seq code/code_seq.cu
+./merge_seq
 
-nvcc -o  question1_mergeSmall_k question1_mergeSmall_k.cu
-./question1_mergeSmall_k
+nvcc -o mergeSmall_k code/mergeSmall_k.cu
+./mergeSmall_k
 
-nvcc -o  question1_mergeSmall_k_shared question1_mergeSmall_k_shared.cu
-./question1_mergeSmall_k_shared
+nvcc -o mergeSmall_k_shared code/mergeSmall_k_shared.cu
+./mergeSmall_k
 
-nvcc -o  question2_mergeBig_k question2_mergeBig_k.cu
-./question2_mergeBig_k
+nvcc -o  mergeBig_k code/mergeBig_k.cu
+./mergeBig_k
 
-nvcc -o  question3_sort question3_sort.cu
-./question3_sort
+nvcc -o sort code/sort.cu
+./sort
 
-nvcc -o  question4_mergeBig_k question4_mergeBig_k.cu
-./question4_mergeBig_k
+nvcc -o sort_stream code/sort_stream.cu
+./sort_stream
 
-nvcc -o  question4_mergeBig_k_stream question4_mergeBig_k_stream.cu
-./question4_mergeBig_k_stream
+nvcc -o  mergeSmallBatches_Only mergeSmallBatches_Only.cu
+./mergeSmallBatches_Only
 
-nvcc -o  question5_mergeSmallBatch_shared question5_mergeSmallBatch_shared.cu
-./question5_mergeSmallBatch_shared
-
-nvcc -o  question5_treeMergePerBlock_simpleExemple question5_treeMergePerBlock_simpleExemple.cu
-./question5_treeMergePerBlock_simpleExemple
-
-nvcc -o  question5_smallBatchesOnly question5_smallBatchesOnly.cu
-./question5_smallBatchesOnly
+nvcc -o  mergeBatches mergeBatches.cu
+./mergeBatches
