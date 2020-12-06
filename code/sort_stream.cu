@@ -1,3 +1,12 @@
+//*****************************************************************************
+//Projet HPC fusion et trie de tableaux sur GPU
+//Auteur: ROBIN Clement et SAULNIER Solene
+//Promo: MAIN5
+//Date: decembre 2020
+//Question 3 avec streams
+//*****************************************************************************
+
+
 #include <stdio.h> 
 #include <stdlib.h>
 #define N 100000
@@ -246,7 +255,7 @@ int main() {
   cudaEventSynchronize(stop);
   float ms = 0;
   cudaEventElapsedTime(&ms, start, stop);
-  fprintf(stderr,"question3 stream Taille_M: %d, nbthreads: %d, numblocks: %d, Temps: %.5f, verif: %d\n", h_taille_M, threadsPerBlock, numBlock, ms,verif_trie(h_M,h_taille_M));
+  fprintf(stderr,"sort_stream Taille_M: %d, nbthreads: %d, numblocks: %d, Temps: %.5f, verif: %d\n", h_taille_M, threadsPerBlock, numBlock, ms,verif_trie(h_M,h_taille_M));
   
 
   /*Destruction des streams restants*/

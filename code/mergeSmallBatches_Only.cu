@@ -1,3 +1,12 @@
+//*****************************************************************************
+//Projet HPC fusion et trie de tableaux sur GPU
+//Auteur: ROBIN Clement et SAULNIER Solene
+//Promo: MAIN5
+//Date: decembre 2020
+//Question 5 mais seulement pour des batches de moins de 1024
+//*****************************************************************************
+
+
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
@@ -229,7 +238,7 @@ int main(int argc, char *argv[]) {
   cudaEventSynchronize(stop);
   float ms = 0;
   cudaEventElapsedTime(&ms, start, stop);
-  fprintf(stderr,"question5 Taille_M: %d, nbthreads: %d, numblocks: %d, Temps: %.5f, verif: %d\n", h_taille_M,threadsPerBlock,numBlock,ms,verif_trie(h_M,h_taille_M));
+  fprintf(stderr,"mergeSmallBatch_Only Taille_M: %d, nbthreads: %d, numblocks: %d, Temps: %.5f, verif: %d\n", h_taille_M,threadsPerBlock,numBlock,ms,verif_trie(h_M,h_taille_M));
   
 
 

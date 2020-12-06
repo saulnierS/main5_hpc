@@ -4,11 +4,12 @@
 //Promo: MAIN5
 //Date: decembre 2020
 //Question 5 avec streams et utilisation de la shared
+//time register
 //*****************************************************************************
 
 #include <stdio.h> 
 #include <stdlib.h>
-#define N 10000 //taille max du tableau =d dans le projet
+#define N 1048576 
 #define threadsPerBlock 1024
 #define numBlock 65535
 
@@ -94,7 +95,7 @@ __global__ void small_sortManager(int *M, int size_A, int size_B, int size_M, in
 
       /*Chargement de A et B dans la shared memory*/
       /*Comme on a une seule shared memory*/
-      __shared__ int shared_AB[1024];  //Comme A et B ne peuvent pas dépasser 1024
+      __shared__ int shared_AB[1024];  //Comme A et B ne peuvent pas depasser 1024
  
       int* s_A = (int*) &shared_AB[0];
       int* s_B = (int*) &s_A[size_A];
@@ -139,7 +140,7 @@ __global__ void small_sortManager_extraSlice(int *M ,int size_A,int size_B,int s
 
       /*Chargement de A et B dans la shared memory*/
       /*Comme on a une seule shared memory*/
-      __shared__ int shared_AB[1024];  //Comme A et B ne peuvent pas dépasser 1024
+      __shared__ int shared_AB[1024];  //Comme A et B ne peuvent pas depasser 1024
  
       int* s_A = (int*) &shared_AB[0];
      
@@ -378,15 +379,19 @@ int main() {
   //srand (time (NULL));
   srand (42);
 
-  /*Déclaration des variables CPU*/
+  /*Declaration des variables CPU*/
   /*Taille des tableaux*/
-  int h_taille_M=N; 
+  for(int var_taille=1024; var_taille<N; var_taille=var_taille+100)
+  {
+
+  
+  int h_taille_M=var_taille; 
 
   /*Tableaux et allocation memoire*/
   int *h_M;
   h_M=(int *)malloc(h_taille_M*sizeof(int));
  
-  /*Déclaration des variables GPU*/  
+  /*Declaration des variables GPU*/  
   int *d_M;
   cudaMalloc(&d_M,h_taille_M*sizeof(int));
 
@@ -598,7 +603,8 @@ int main() {
   free(h_M);
   free(h_batch_M);
   free(h_irregular_batch_M);
-
+  
+  }
 
     return 0;
 }

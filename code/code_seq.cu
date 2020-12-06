@@ -1,3 +1,10 @@
+//*****************************************************************************
+//Projet HPC fusion et trie de tableaux sur GPU
+//Auteur: ROBIN Clement et SAULNIER Solene
+//Promo: MAIN5
+//Date: decembre 2020
+//information code en sur cpu
+//*****************************************************************************
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
@@ -25,7 +32,7 @@ void fusion(int* tableau,int deb1,int fin1,int fin2)
         
   table1=(int *) malloc((fin1-deb1+1)*sizeof(int));
 
-  //on recopie les éléments du début du tableau
+  //on recopie les elements du debut du tableau
   for(i=deb1;i<=fin1;i++)
   {
       table1[i-deb1]=tableau[i];
@@ -33,23 +40,23 @@ void fusion(int* tableau,int deb1,int fin1,int fin2)
                   
   for(i=deb1;i<=fin2;i++)
   {        
-    if (compt1==deb2) //c'est que tous les éléments du premier tableau ont été utilisés
+    if (compt1==deb2) //c est que tous les elements du premier tableau ont ete utilises
     {
-      break; //tous les éléments ont donc été classés
+      break; //tous les elements ont donc ete classes
     }
-    else if (compt2==(fin2+1)) //c'est que tous les éléments du second tableau ont été utilisés
+    else if (compt2==(fin2+1)) //c est que tous les elements du second tableau ont ete utilises
     {
-      tableau[i]=table1[compt1-deb1]; //on ajoute les éléments restants du premier tableau
+      tableau[i]=table1[compt1-deb1]; //on ajoute les elements restants du premier tableau
       compt1++;
     }
     else if (table1[compt1-deb1]<tableau[compt2])
     {
-      tableau[i]=table1[compt1-deb1]; //on ajoute un élément du premier tableau
+      tableau[i]=table1[compt1-deb1]; //on ajoute un element du premier tableau
       compt1++;
     }
     else
     {
-      tableau[i]=tableau[compt2]; //on ajoute un élément du second tableau
+      tableau[i]=tableau[compt2]; //on ajoute un element du second tableau
       compt2++;
     }
   }
@@ -117,7 +124,7 @@ int main(int argc, char *argv[]) {
 
   srand(42);
 
-  /*Déclaration des variables CPU*/
+  /*Declaration des variables CPU*/
   /*Taille des tableaux*/
   int h_taille_A=N-10;
   int h_taille_B=N-h_taille_A;
@@ -165,12 +172,12 @@ int main(int argc, char *argv[]) {
   cudaEventSynchronize(stop);
   float ms = 0;
   cudaEventElapsedTime(&ms, start, stop);
-  printf("\nCode sequentiel\n Taille_M: %d, Temps:%.5f\n", h_taille_M,ms);
+  fprintf(stderr,"code sequentiel Taille_A: %d, Taille_B: %d, Taille_M: %d, Temps: %.5f, verif: %d\n", h_taille_A, h_taille_B, h_taille_M,ms,verif_trie(h_M,h_taille_M));
   
   
   /*Verification*/
   if (verif_trie(h_M,h_taille_M)==1)
-    printf("\n ok tableau M trié\n");
+    printf("\n ok tableau M trie\n");
   else
     printf("\n KO probleme a l indice %d\n",verif_trie(h_M,h_taille_M));
 
