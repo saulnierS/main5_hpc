@@ -23,7 +23,7 @@ int verif_trie(int *tab,int size)
     for (int i=0; i<size-1; i=i+1)
       if (tab[i]>tab[i+1])
           return i;
-    return 1;
+    return -1;
     
 }
 
@@ -184,7 +184,7 @@ int main() {
 
   /*Declaration des variables CPU*/
   /*Taille des tableaux*/
-  int h_taille_M=N; 
+  int h_taille_M=176128; 
 
   /*Tableaux et allocation memoire*/
   int *h_M;
@@ -263,7 +263,7 @@ int main() {
     cudaStreamDestroy(stream[i]);
 
   /*Verification*/
-  if (verif_trie(h_M,h_taille_M)==1)
+  if (verif_trie(h_M,h_taille_M)==-1)
     printf("ok tableau trie");
   else
     printf("KO recommencer %d ",verif_trie(h_M,h_taille_M) );

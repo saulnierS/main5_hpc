@@ -17,8 +17,8 @@ nvcc -o sort code/sort.cu
 nvcc -o sort_stream code/sort_stream.cu
 ./sort_stream
 
-nvcc -o  mergeSmallBatches_Only mergeSmallBatches_Only.cu
+nvcc -o  mergeSmallBatches_Only code/mergeSmallBatches_Only.cu
 ./mergeSmallBatches_Only
 
-nvcc -o  mergeBatches mergeBatches.cu
+nvcc -o  mergeBatches code/mergeBatches.cu
 ./mergeBatches

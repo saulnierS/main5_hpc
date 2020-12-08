@@ -22,7 +22,7 @@ int verif_trie(int *tab,int size)
     for (int i=0; i<size-1; i=i+1)
       if (tab[i]>tab[i+1])
           return i;
-    return 1;
+    return -1;
     
 }
 
@@ -266,7 +266,7 @@ int main(int argc, char *argv[]) {
   fprintf(stderr,"mergeSmall_k_shared Taille_A: %d, Taille_B: %d, Taille_M: %d, nbthreads: %d, Temps: %.5f, verif: %d\n", h_taille_A, h_taille_B, h_taille_M,numThreads,ms,verif_trie(h_M,h_taille_M));
   
   /*Verification*/
-  if (verif_trie(h_M,h_taille_M)==1)
+  if (verif_trie(h_M,h_taille_M)==-1)
     printf("\n ok tableau trie\n");
   else
     printf("\n KO probleme a l indice %d\n",verif_trie(h_M,h_taille_M));

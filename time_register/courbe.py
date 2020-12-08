@@ -6,10 +6,10 @@ from scipy.interpolate import interp1d
 import re
 
 #Expressions regulieres de chaque question
-RE_cpu = re.compile("^(.+) Taille_A: (\d+), Taille_B: (\d+), Taille_M: (\d+), Temps: (\d+).(\d+), verif: (\d+)")
-RE_gpu_merge_threadsOnly = re.compile("^(.+) Taille_A: (\d+), Taille_B: (\d+), Taille_M: (\d+), nbthreads: (\d+), Temps: (\d+).(\d+), verif: (\d+)") 
-RE_gpu_merge = re.compile("^(.+) Taille_A: (\d+), Taille_B: (\d+), Taille_M: (\d+), nbthreads: (\d+), numblocks: (\d+), Temps: (\d+).(\d+), verif: (\d+)") 
-RE_gpu_sort = re.compile("^(.+) Taille_M: (\d+), nbthreads: (\d+), numblocks: (\d+), Temps: (\d+).(\d+), verif: (\d+)") 
+RE_cpu = re.compile("^(.+) Taille_A: (\d+), Taille_B: (\d+), Taille_M: (\d+), Temps: (\d+).(\d+), verif: .*(\d+)")
+RE_gpu_merge_threadsOnly = re.compile("^(.+) Taille_A: (\d+), Taille_B: (\d+), Taille_M: (\d+), nbthreads: (\d+), Temps: (\d+).(\d+), verif: .*(\d+)") 
+RE_gpu_merge = re.compile("^(.+) Taille_A: (\d+), Taille_B: (\d+), Taille_M: (\d+), nbthreads: (\d+), numblocks: (\d+), Temps: (\d+).(\d+), verif: .*(\d+)") 
+RE_gpu_sort = re.compile("^(.+) Taille_M: (\d+), nbthreads: (\d+), numblocks: (\d+), Temps: (\d+).(\d+), verif: .*(\d+)") 
 
 
 def nb_line(nom):

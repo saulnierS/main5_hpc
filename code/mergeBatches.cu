@@ -8,7 +8,7 @@
 
 #include <stdio.h> 
 #include <stdlib.h>
-#define N 10000 //taille max du tableau =d dans le projet
+#define N 100000000 //taille max du tableau =d dans le projet
 #define threadsPerBlock 1024
 #define numBlock 65535
 
@@ -21,7 +21,7 @@ int verif_trie(int *tab,int size)
     for (int i=0; i<size-1; i=i+1)
       if (tab[i]>tab[i+1])
           return i;
-    return 1;
+    return -1;
     
 }
 
@@ -374,7 +374,8 @@ void sortManager_CPU(int *h_M,int h_size_A,int h_size_B,int h_slice_size,int i,c
 //*****************************************************************************
 //MAIN
 //*****************************************************************************
-int main() {
+int main(int argc, char const *argv[])
+{
   //srand (time (NULL));
   srand (42);
 
@@ -382,6 +383,15 @@ int main() {
   /*Taille des tableaux*/
   int h_taille_M=N; 
 
+
+  for (int i=0; i<argc-1; i=i+1)
+  {
+      if (strcmp(argv[i],"--t")==0 && atoi(argv[i+1])<N)
+      {
+          print("h%d\n",h_taille_M)
+          h_taille_M=atoi(argv[i+1]);     
+      }
+  }
   /*Tableaux et allocation memoire*/
   int *h_M;
   h_M=(int *)malloc(h_taille_M*sizeof(int));
@@ -584,12 +594,13 @@ int main() {
     cudaStreamDestroy(stream[i]);
 
   /*Verification*/
-  if (verif_trie(h_M,h_taille_M)==1)
+  if (verif_trie(h_M,h_taille_M)==-1)
     printf("ok tableau trie");
   else
     printf("KO recommencer %d ",verif_trie(h_M,h_taille_M) );
 
   /*Liberation*/
+  cudaFree(d_M);
   cudaFree(d_batch_M);
   cudaFree(d_irregular_batch_M);
 

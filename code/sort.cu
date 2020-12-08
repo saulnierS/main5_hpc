@@ -23,7 +23,7 @@ int verif_trie(int *tab,int size)
     for (int i=0; i<size-1; i=i+1)
       if (tab[i]>tab[i+1])
           return i;
-    return 1;
+    return -1;
     
 }
 //*****************************************************************************
@@ -243,7 +243,7 @@ int main() {
   fprintf(stderr,"sort Taille_M: %d, nbthreads: %d, numblocks: %d, Temps: %.5f, verif: %d\n", h_taille_M, threadsPerBlock, numBlock, ms,verif_trie(h_M,h_taille_M));
 
   /*Verification*/
-  if (verif_trie(h_M,h_taille_M)==1)
+  if (verif_trie(h_M,h_taille_M)==-1)
     printf("ok tableau trie");
   else
     printf("KO recommencer %d ",verif_trie(h_M,h_taille_M) );
