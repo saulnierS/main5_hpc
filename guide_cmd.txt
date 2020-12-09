@@ -1,0 +1,32 @@
+#copie des fichiers vers la ppti 
+$scp -r code/ <num_etudiant>@ssh.ufr-info-p6.jussieu.fr:.
+
+#aller sur la passerelle
+$ssh <num_etudiant>@ssh.ufr-info-p6.jussieu.fr
+
+#aller sur le gpu 3
+$ssh ppti-gpu-3
+
+#copie des fichiers sur le gpu
+$scp -r <num_etudiant>@ssh.ufr-info-p6.jussieu.fr:code/ .
+
+#autorisation des droits d'execution du cmd_timer.sh
+$cd code/
+$chmod 777 cmd_time.sh
+
+#execution
+$./cmd_time.sh
+
+#copie des fichiers txt sur la passerelle
+$scp -r ../res/ <num_etudiant>@ssh.ufr-info-p6.jussieu.fr:.
+
+#quitter le gpu
+$ctrl+d
+
+#quitter la passerelle
+$ctrl+d
+
+#copie des fichiers txt en local
+$scp -r <num_etudiant>@ssh.ufr-info-p6.jussieu.fr:res/ .
+
+

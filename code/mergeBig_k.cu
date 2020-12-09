@@ -6,12 +6,11 @@
 //Question 2
 //*****************************************************************************
 
-
 #include <stdio.h> 
 #include <stdlib.h>
 #define N 67107840
 #define threadsPerBlock 1024
-#define numBlock 65535
+#define nbBlocks 65535
 
 
 //*****************************************************************************
@@ -176,14 +175,33 @@ __global__ void sortManager(int *A, int *B, int *M, int *Path, int size_A, int s
 //*****************************************************************************
 int main(int argc, char const *argv[])
 {
-
+  //srand (time (NULL));
   srand (42);
+
+  
+  /*Initialisation du nombre de threads et blocks*/
   int numThreads=threadsPerBlock;
+  int numBlocks=nbBlocks;
+
   /*Declaration des variables CPU*/
   /*Taille des tableaux*/
   int h_taille_A=rand()%(N-1)+1;
   int h_taille_B=N-h_taille_A;
   int h_taille_M=h_taille_A+h_taille_B;
+
+  /*Traitement des options*/
+  for (int i=0; i<argc-1; i=i+1)
+  {
+      if (strcmp(argv[i],"--sA")==0 && atoi(argv[i+1])<N )
+          h_taille_A=atoi(argv[i+1]);
+      if (strcmp(argv[i],"--sB")==0 && atoi(argv[i+1])<N)
+          h_taille_B=atoi(argv[i+1]);
+      if (strcmp(argv[i],"--threads")==0 && atoi(argv[i+1])<threadsPerBlock )
+          numThreads=atoi(argv[i+1]);
+      if (strcmp(argv[i],"--blocks")==0 && atoi(argv[i+1])<nbBlocks )
+          numBlocks=atoi(argv[i+1]);    
+  }
+
 
   if (h_taille_A < h_taille_B)
   {
@@ -240,7 +258,7 @@ int main(int argc, char const *argv[])
 
   /*Merge tableau*/
   cudaEventRecord(start);
-  sortManager<<<numBlock,threadsPerBlock>>>(d_A, d_B, d_M, d_Path, h_taille_A, h_taille_B, h_taille_M);
+  sortManager<<<numBlocks,numThreads>>>(d_A, d_B, d_M, d_Path, h_taille_A, h_taille_B, h_taille_M);
   cudaDeviceSynchronize();
   cudaEventRecord(stop);
 
@@ -253,9 +271,9 @@ int main(int argc, char const *argv[])
   cudaEventSynchronize(stop);
   float ms = 0;
   cudaEventElapsedTime(&ms, start, stop);
-  fprintf(stderr,"mergeBig_k Taille_A: %d, Taille_B: %d, Taille_M: %d, nbthreads: %d, numblocks: %d, Temps: %.5f, verif: %d\n", h_taille_A, h_taille_B, h_taille_M,numThreads,numBlock,ms,verif_trie(h_M,h_taille_M));
+  fprintf(stderr,"mergeBig_k Taille_A: %d, Taille_B: %d, Taille_M: %d, nbthreads: %d, numblocks: %d, Temps: %.5f, verif: %d\n", h_taille_A, h_taille_B, h_taille_M,numThreads,numBlocks,ms,verif_trie(h_M,h_taille_M));
 
-
+  /*Verification*/
   if (verif_trie(h_M,h_taille_M)==-1)
     printf("\nok tableau trie\n");
   else

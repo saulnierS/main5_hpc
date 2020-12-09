@@ -6,12 +6,11 @@
 //Question 3
 //*****************************************************************************
 
-
 #include <stdio.h> 
 #include <stdlib.h>
-#define N 100000
+#define N 536870912
 #define threadsPerBlock 1024
-#define numBlock 65535
+#define nbBlocks 65535
 
 
 //*****************************************************************************
@@ -109,7 +108,7 @@ __global__ void sortManager_GPU(int *A, int *B, int *M,int *Path, int size_A, in
     mergeBig_k(A, B, M, Path, size_A, size_B, size_M);
 }
 
-void sortManager_CPU(int *h_M,int h_size_A,int h_size_B,int h_slice_size,int i)
+void sortManager_CPU(int *h_M,int h_size_A,int h_size_B,int h_slice_size,int i, int numThreads, int numBlocks)
 {
     
     /*Variables CPU*/ 
@@ -147,13 +146,13 @@ void sortManager_CPU(int *h_M,int h_size_A,int h_size_B,int h_slice_size,int i)
     if (h_size_A<h_size_B)
     {
 
-        sortManager_GPU<<<numBlock,threadsPerBlock>>>(d_B, d_A, d_M_tmp, d_Path_tmp, h_size_B, h_size_A, h_size_M_tmp);
+        sortManager_GPU<<<numBlocks,numThreads>>>(d_B, d_A, d_M_tmp, d_Path_tmp, h_size_B, h_size_A, h_size_M_tmp);
         cudaDeviceSynchronize();
     }
     else
     {
 
-        sortManager_GPU<<<numBlock,threadsPerBlock>>>(d_A, d_B, d_M_tmp, d_Path_tmp, h_size_A, h_size_B, h_size_M_tmp);
+        sortManager_GPU<<<numBlocks,numThreads>>>(d_A, d_B, d_M_tmp, d_Path_tmp, h_size_A, h_size_B, h_size_M_tmp);
         cudaDeviceSynchronize();    
     }
     
@@ -177,13 +176,31 @@ void sortManager_CPU(int *h_M,int h_size_A,int h_size_B,int h_slice_size,int i)
 //*****************************************************************************
 //MAIN
 //*****************************************************************************
-int main() {
-  srand (time (NULL));
+int main(int argc, char const *argv[])
+{
+  //srand (time (NULL));
+  srand (42);
 
 
-  /*Déclaration des variables CPU*/
+  /*Initialisation du nombre de threads et blocks*/
+  int numThreads=threadsPerBlock;
+  int numBlocks=nbBlocks;
+
+  /*Declaration des variables CPU*/
   /*Taille des tableaux*/
-  int h_taille_M=N; 
+  int h_taille_M=10000;
+
+  /*Traitement des options*/
+  for (int i=0; i<argc-1; i=i+1)
+  {
+      if (strcmp(argv[i],"--s")==0 && atoi(argv[i+1])<N )
+          h_taille_M=atoi(argv[i+1]);
+      if (strcmp(argv[i],"--threads")==0 && atoi(argv[i+1])<threadsPerBlock )
+          numThreads=atoi(argv[i+1]);
+      if (strcmp(argv[i],"--blocks")==0 && atoi(argv[i+1])<nbBlocks )
+          numBlocks=atoi(argv[i+1]);    
+  }
+
 
   /*Tableaux et allocation memoire*/
   int *h_M;
@@ -219,16 +236,14 @@ int main() {
       h_slice_number=h_taille_M/h_slice_size;
       
 
-      for (int i=0; i<h_slice_number; i++)
-      {   
-          sortManager_CPU(h_M,h_slice_size/2,h_slice_size/2,h_slice_size,i);
+      for (int i=0; i<h_slice_number; i++) 
+          sortManager_CPU(h_M,h_slice_size/2,h_slice_size/2,h_slice_size,i,numThreads,numBlocks);
           
-      }
       if (h_slice_reste_precedent!=0 && h_slice_reste!=0)
       {
               int h_taille_A=h_slice_reste-h_slice_reste_precedent;
               int h_taille_B=h_slice_reste_precedent;
-              sortManager_CPU(h_M,h_taille_A,h_taille_B,h_slice_size,h_slice_number);
+              sortManager_CPU(h_M,h_taille_A,h_taille_B,h_slice_size,h_slice_number,numThreads,numBlocks);
 
       }
           
@@ -240,13 +255,15 @@ int main() {
   cudaEventSynchronize(stop);
   float ms = 0;
   cudaEventElapsedTime(&ms, start, stop);
-  fprintf(stderr,"sort Taille_M: %d, nbthreads: %d, numblocks: %d, Temps: %.5f, verif: %d\n", h_taille_M, threadsPerBlock, numBlock, ms,verif_trie(h_M,h_taille_M));
+  fprintf(stderr,"sort Taille_M: %d, nbthreads: %d, numblocks: %d, Temps: %.5f, verif: %d\n", h_taille_M, numThreads, numBlocks, ms,verif_trie(h_M,h_taille_M));
 
   /*Verification*/
   if (verif_trie(h_M,h_taille_M)==-1)
     printf("ok tableau trie");
   else
     printf("KO recommencer %d ",verif_trie(h_M,h_taille_M) );
+
+
 
   /*Liberation*/
   free(h_M);

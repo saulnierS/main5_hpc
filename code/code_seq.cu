@@ -8,7 +8,7 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
-#define N 1024
+#define N 536870912
 
 //*****************************************************************************
 //Fonctions CPU fusion et verification
@@ -120,15 +120,26 @@ void mergeSmall_k(int *A, int *B, int *M, int size_A, int size_B, int size_M)
 //*****************************************************************************
 //MAIN
 //*****************************************************************************
-int main(int argc, char *argv[]) {
-
+int main(int argc, char *argv[]) 
+{
+  //srand (time (NULL));
   srand(42);
 
   /*Declaration des variables CPU*/
   /*Taille des tableaux*/
-  int h_taille_A=N-10;
-  int h_taille_B=N-h_taille_A;
+  int h_taille_A=1024/2;
+  int h_taille_B=1024-h_taille_A;
   int h_taille_M=h_taille_A+h_taille_B;
+
+  /*Traitement des options*/
+  for (int i=0; i<argc-1; i=i+1)
+  {
+      if (strcmp(argv[i],"--sA")==0 && atoi(argv[i+1])<N )
+          h_taille_A=atoi(argv[i+1]);
+      if (strcmp(argv[i],"--sB")==0 && atoi(argv[i+1])<N)
+          h_taille_B=atoi(argv[i+1]);   
+  }
+
 
   if (h_taille_A < h_taille_B)
   {
@@ -144,7 +155,6 @@ int main(int argc, char *argv[]) {
   h_A=(int *)malloc(h_taille_A*sizeof(int));
   h_B=(int *)malloc(h_taille_B*sizeof(int));
   h_M=(int *)malloc(h_taille_M*sizeof(int));
-
   
    
   /*Initialisation et preparation des tableaux*/
@@ -180,7 +190,6 @@ int main(int argc, char *argv[]) {
     printf("\n ok tableau M trie\n");
   else
     printf("\n KO probleme a l indice %d\n",verif_trie(h_M,h_taille_M));
-
 
 
   /*Liberation*/

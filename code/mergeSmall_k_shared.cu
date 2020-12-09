@@ -184,6 +184,9 @@ __global__ void sortManager(int *A, int *B, int *M, int size_A, int size_B, int 
 int main(int argc, char *argv[]) {
     
   srand(42);
+
+  
+  /*Initialisation du nombre de threads*/
   int numThreads=threadsPerBlock;
 
 
@@ -193,13 +196,14 @@ int main(int argc, char *argv[]) {
   int h_taille_B=N-h_taille_A;
   int h_taille_M=h_taille_A+h_taille_B;
 
+  /*Traitement des options*/
   for (int i=0; i<argc-1; i=i+1)
   {
-      if (strcmp(argv[i],"--tailleA")==0 && atoi(argv[i+1])<N )
+      if (strcmp(argv[i],"--sA")==0 && atoi(argv[i+1])<N )
           h_taille_A=atoi(argv[i+1]);
-      if (strcmp(argv[i],"--tailleB")==0 && atoi(argv[i+1])<N)
+      if (strcmp(argv[i],"--sB")==0 && atoi(argv[i+1])<N)
           h_taille_B=atoi(argv[i+1]);
-      if (strcmp(argv[i],"--nbthreads")==0 && atoi(argv[i+1])<threadsPerBlock )
+      if (strcmp(argv[i],"--threads")==0 && atoi(argv[i+1])<threadsPerBlock )
           numThreads=atoi(argv[i+1]);     
   }
 
@@ -270,7 +274,8 @@ int main(int argc, char *argv[]) {
     printf("\n ok tableau trie\n");
   else
     printf("\n KO probleme a l indice %d\n",verif_trie(h_M,h_taille_M));
-   
+
+
   cudaFree(d_A);
   cudaFree(d_B);
   cudaFree(d_M);

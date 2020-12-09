@@ -8,9 +8,9 @@
 
 #include <stdio.h> 
 #include <stdlib.h>
-#define N 100000000 //taille max du tableau =d dans le projet
+#define N 536870912 //taille max du tableau =d dans le projet
 #define threadsPerBlock 1024
-#define numBlock 65535
+#define numBlocks 65535
 
 
 //*****************************************************************************
@@ -347,9 +347,9 @@ void sortManager_CPU(int *h_M,int h_size_A,int h_size_B,int h_slice_size,int i,c
  
     /*Sort*/
     if (h_size_A<h_size_B)
-      sortManager_GPU<<<numBlock,threadsPerBlock,0, stream[i]>>>(d_B, d_A, d_M_tmp, d_Path_tmp, h_size_B, h_size_A, h_size_M_tmp);
+      sortManager_GPU<<<numBlocks,threadsPerBlock,0, stream[i]>>>(d_B, d_A, d_M_tmp, d_Path_tmp, h_size_B, h_size_A, h_size_M_tmp);
     else
-      sortManager_GPU<<<numBlock,threadsPerBlock,0, stream[i]>>>(d_A, d_B, d_M_tmp, d_Path_tmp, h_size_A, h_size_B, h_size_M_tmp);   
+      sortManager_GPU<<<numBlocks,threadsPerBlock,0, stream[i]>>>(d_A, d_B, d_M_tmp, d_Path_tmp, h_size_A, h_size_B, h_size_M_tmp);   
     
     /*Transfert memoire GPU*/
     cudaMemcpyAsync(h_M_tmp, d_M_tmp, h_size_M_tmp*sizeof(int), cudaMemcpyDeviceToHost, stream[i]);
@@ -379,19 +379,18 @@ int main(int argc, char const *argv[])
   //srand (time (NULL));
   srand (42);
 
+
   /*Déclaration des variables CPU*/
   /*Taille des tableaux*/
-  int h_taille_M=N; 
+  int h_taille_M=N;
 
-
+  /*Traitement des options*/
   for (int i=0; i<argc-1; i=i+1)
   {
-      if (strcmp(argv[i],"--t")==0 && atoi(argv[i+1])<N)
-      {
-          print("h%d\n",h_taille_M)
-          h_taille_M=atoi(argv[i+1]);     
-      }
+      if (strcmp(argv[i],"--s")==0 && atoi(argv[i+1])<N )
+          h_taille_M=atoi(argv[i+1]);   
   }
+
   /*Tableaux et allocation memoire*/
   int *h_M;
   h_M=(int *)malloc(h_taille_M*sizeof(int));
@@ -587,7 +586,7 @@ int main(int argc, char const *argv[])
   cudaEventSynchronize(stop);
   float ms = 0;
   cudaEventElapsedTime(&ms, start, stop);
-  fprintf(stderr,"mergeBatches Taille_M: %d, nbthreads: %d, numblocks: %d, Temps: %.5f, verif: %d\n", h_taille_M, threadsPerBlock, numBlock, ms,verif_trie(h_M,h_taille_M));
+  fprintf(stderr,"mergeBatches Taille_M: %d, nbthreads: %d, numblocks: %d, Temps: %.5f, verif: %d\n", h_taille_M, threadsPerBlock, numBlocks, ms,verif_trie(h_M,h_taille_M));
   
   /*Destructions des streams restants*/
   for (int i=0; i<h_number_of_slices; i++)
@@ -606,6 +605,7 @@ int main(int argc, char const *argv[])
 
   for (int b=0;b<h_number_of_batches;b++)
       free(h_batch_M[b]);
+    
   free(h_M);
   free(h_batch_M);
   free(h_irregular_batch_M);
