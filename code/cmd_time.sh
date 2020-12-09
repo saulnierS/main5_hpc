@@ -23,7 +23,7 @@ fi
 if [ -x mergeBatches ]
 then 
 	./mergeBatches --s 1024 2>../res/mergeBatches.txt
-	for i in `seq 2048 2048 10000`
+	for i in `seq 2048 2048 10000000`
 	do
 		./mergeBatches --s $i 2>>../res/mergeBatches.txt
 	done
