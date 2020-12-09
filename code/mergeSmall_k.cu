@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 
   /*Declaration des variables CPU*/
   /*Taille des tableaux*/
-  int h_taille_A=N-10;
+  int h_taille_A=N/2;
   int h_taille_B=N-h_taille_A;
   int h_taille_M=h_taille_A+h_taille_B;
 
