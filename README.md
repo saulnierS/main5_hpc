@@ -3,31 +3,40 @@ Projet : Batch merge and merge path sort
 
 #Fichiers
 code/: (contient l'ensemble des codes)
-time_register/: (permet d'enregistrer les temps d'execution des codes)
- => ces repertoires contiennent les mêmes fichiers qui sont les suivants:
 
-code_seq.cu: (écrit en cuda) merge 2 tableaux en séquentiel sur cpu.
+	code_seq.cu: (écrit en cuda) merge 2 tableaux en séquentiel sur cpu.
 
-mergeSmall_k.cu : (écrit en cuda) merge 2 tableaux sur gpu sur 1 seul block. La taille de A plus la taille de B ne doit pas dépasser 1024.
+	mergeBatches_seq.cu: (écrit en cuda) trie un tableau à la manière de mergeBatches mais en séquentiel et sur CPU.
 
-mergeSmall_k_shared.cu : (écrit en cuda) merge 2 tableaux sur gpu sur 1 seul block. La taille de A plus la taille de B ne doit pas dépasser 1024. Cette fois on utilise la shared mémory du bloc.
+	mergeSmall_k.cu : (écrit en cuda) merge 2 tableaux sur gpu sur 1 seul block. La taille de A plus la taille de B ne doit pas dépasser 1024.
 
-mergeBig_k.cu : (écrit en cuda) merge 2 tableaux sur gpu sur plusieurs blocks cette fois. Attention à ne pas dépasser la mémoire globale.
+	mergeSmall_k_shared.cu : (écrit en cuda) merge 2 tableaux sur gpu sur 1 seul block. La taille de A plus la taille de B ne doit pas dépasser 1024. Cette fois on utilise la shared mémory du bloc.
 
-sort.cu : (écrit en cuda) réalise le trie d'un tableau sur gpu avec plusieurs bloc et plusieurs threads.
+	mergeBig_k.cu : (écrit en cuda) merge 2 tableaux sur gpu sur plusieurs blocks cette fois. Attention à ne pas dépasser la mémoire globale.
 
-sort_stream.cu : (écrit en cuda) réalise le trie d'un tableau sur gpu avec plusieurs bloc et plusieurs threads et avec les streams.
+	sort.cu : (écrit en cuda) réalise le trie d'un tableau sur gpu avec plusieurs bloc et plusieurs threads.
 
-mergeSmallBatches_Only.cu : (écrit en cuda) divise un tableau en sous tableaux et merge des Batches de 1024 éléments maximums
+	sort_stream.cu : (écrit en cuda) réalise le trie d'un tableau sur gpu avec plusieurs bloc et plusieurs threads et avec les streams.
 
-mergeBatches.cu : (écrit en cuda) divise un tableau en sous tableaux et merge les sous tableaux entre eux sous forme de Batches de 1024 en parallèle (avec les streams) dans un premier temps quand les tailles dépassent 1024 merge avec mergeBig_k. La shared et les streams sont mis à contribution
+	mergeSmallBatches_Only.cu : (écrit en cuda) divise un tableau en sous tableaux et merge des Batches de 1024 éléments maximums
+
+	mergeBatches.cu : (écrit en cuda) divise un tableau en sous tableaux et merge les sous tableaux entre eux sous forme de Batches de 1024 en parallèle (avec les streams) dans un premier temps quand les tailles dépassent 1024 merge avec mergeBig_k. La shared et les streams sont mis à contribution
+
+	cmd_mergeBatches.sh : permet d'executer mergeBatches pour differentes tailles et sauvegarde le tout dans un fichier .txt dans res/
+
+	cmd_mergeSmall.sh  : permet d'executer mergeSmall_k et mergeSmall_k_shared pour differents nombres de threads et sauvegarde le tout dans des fichier .txt dans res/.
+
+	cmd_sort.sh  : permet d'executer sort et sort_stream pour differentes tailles et sauvegarde le tout dans des fichier .txt dans res/.
 
 
-cmd.sh: permet d'executer l'ensemble des fichiers, contient toutes les commandes. attention rectifier les droits pour pouvoir l'executer. Faire chmod 777 cmd.sh puis ./cmd.sh
-
-Makefile: la commande make permet d'executer tous les fichiers afin d'avoir tous les executables. Il y a un make clean disponible pour supprimer les exécutables et chaque question peut être compiler avec make question1 (cela peut être 1,2,3,5).attention il n'y a pas de code pour la question4
+	Makefile: la commande make permet d'executer tous les fichiers afin d'avoir tous les executables. Il y a un make clean disponible pour supprimer les exécutables et chaque question peut être compiler avec make question1 (cela peut être 1,2,3,5).attention il n'y a pas de code pour la question4
 
 README.md : fichier guide
+
+cmd.sh: permet d'executer l'ensemble des fichiers, contient toutes les commandes
+
+Projet.pdf : sujet du projet
+res/: contient l'ensemble des résultats d'exécution, et un fichier courbe.py permettant de tracer les courbes et de traiter les .txt.
 
 #Execution
 Ce projet est codé en c et en cuda. Il est implémenté pour s'executer sur GPU. Autrement il suffit de compiler avec nvcc les fichiers cuda (nvcc -o nom_fichier nom_fichier.cu). puis d'executer (./nom_fichier)

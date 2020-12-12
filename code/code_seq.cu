@@ -94,7 +94,7 @@ void mergeSmall_k(int *A, int *B, int *M, int size_A, int size_B, int size_M)
   int j = 0;
   while (i+j<size_M)
   {  
-    if (i>size_A)
+    if (i>=size_A)
     {
       M[i+j]=B[j];
       j++;

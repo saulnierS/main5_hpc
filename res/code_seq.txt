@@ -1,0 +1,9 @@
+code_seq Taille_A: 5000, Taille_B: 5000, Taille_M: 10000, nbthreads: 1024, numblocks: 65535, Temps: 0.12653, verif: -1
+code_seq Taille_A: 50000, Taille_B: 50000, Taille_M: 100000, nbthreads: 1024, numblocks: 65535, Temps: 0.78915, verif: -1
+code sequentiel Taille_A: 70000, Taille_B: 70000, Taille_M: 140000, Temps: 1.04019, verif: -1
+code sequentiel Taille_A: 75000, Taille_B: 75000, Taille_M: 150000, Temps: 1.14736, verif: -1
+code sequentiel Taille_A: 100000, Taille_B: 100000, Taille_M: 200000, Temps: 1.48109, verif: -1
+code sequentiel Taille_A: 200000, Taille_B: 200000, Taille_M: 400000, Temps: 2.70995, verif: -1
+code_seq Taille_A: 500000, Taille_B: 500000, Taille_M: 1000000, nbthreads: 1024, numblocks: 65535, Temps: 5.99654, verif: -1
+code_seq Taille_A: 5000000, Taille_B: 5000000, Taille_M: 10000000, nbthreads: 1024, numblocks: 65535, Temps: 55.45744, verif: -1
+code_seq Taille_A: 50000000, Taille_B: 50000000, Taille_M: 100000000, nbthreads: 1024, numblocks: 65535, Temps: 559.38025, verif: -1
