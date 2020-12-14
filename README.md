@@ -36,6 +36,11 @@ README.md : fichier guide
 cmd.sh: permet d'executer l'ensemble des fichiers, contient toutes les commandes
 
 Projet.pdf : sujet du projet
+
+HPC_CODE.pdf : presentation des codes
+
+HPC_RUNTIME.pdg : presentation des résultats des exécutions des codes
+
 res/: contient l'ensemble des résultats d'exécution, et un fichier courbe.py permettant de tracer les courbes et de traiter les .txt.
 
 #Execution
