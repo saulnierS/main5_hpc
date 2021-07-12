@@ -65,23 +65,23 @@ Un cmd.sh est diponible:
 ``./cmd.sh ``
 
 # Rappel Commande git
-Dès que vous créez un nouveau fichier ajouter le au dépôt 
+Dès que vous créez un nouveau fichier ajoutez le au dépôt 
 ``git add fichier ``
 
-Dès que vous modifier un fichier un fichier ajouter le au prochain
+Dès que vous modifiez un fichier un fichier ajoutez le au prochain
 commit
 ``git add fichier ``
 
-Commiter une version de votre travail 
+Commitez une version de votre travail 
 ``git commit -m "Un message" ``
 
 A la fin de la séance votre projet doit étre mis dans le répo avec la commande
 ``git push``
 
-Vérifier que vous avez bien tout comité 
+Vérifiez que vous avez bien tout comité 
 ``git status``
 
-revenir à la dernière version commit
+pour revenir à la dernière version commit
 ``git checkout <fichier>``
 
 Création d'une branche et basculement vers celle ci
